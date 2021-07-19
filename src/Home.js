@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-native/no-inline-styles */
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Button, Alert, ActivityIndicator } from 'react-native';
+import { View, Text, TextInput, Button, Alert, ActivityIndicator} from 'react-native';
 import { PERMISSIONS } from 'react-native-permissions';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
@@ -11,7 +11,7 @@ import permissionHandler from './permissionHandler';
 
 const Home = ({ roomState, setRoomState, handleRoomInputChange }) => {
 
-    const API_URL = 'https://a8e32dca9a86.ngrok.io';
+    const API_URL = 'https://41094903dcf9.ngrok.io';
     const navigation = useNavigation();
     const [showLoading, setShowLoading] = useState(false);
     const [isPermissionGranted, setPermssionGranted] = useState(false);
@@ -46,7 +46,7 @@ const Home = ({ roomState, setRoomState, handleRoomInputChange }) => {
                 console.log("jwtToken: ", jwtToken);
                 setRoomState({ ...roomState, token: jwtToken });
                 setShowLoading(false);
-                navigation.navigate('Video Call',);
+                navigation.navigate('Video-Call');
             } else {
                 const error = res.toString();
                 Alert.alert('ERROR:', error);
@@ -61,7 +61,7 @@ const Home = ({ roomState, setRoomState, handleRoomInputChange }) => {
     console.log(isPermissionGranted);
 
     return (
-        <View style={{ padding: 20, display: 'flex', justifyContent: 'space-around' }}>
+        <View style={{ padding: 20, height: "100%", display: 'flex', justifyContent: 'space-around' }}>
             {
                 isPermissionGranted ?
                     <View style={{ height: 200, display: 'flex', justifyContent: 'space-around' }}>
@@ -114,5 +114,7 @@ const Home = ({ roomState, setRoomState, handleRoomInputChange }) => {
         </View>
     );
 };
+
+
 
 export default Home;

@@ -52,7 +52,7 @@ const App = () => {
             )}
           />
           <Stack.Screen
-            name="Video Call"
+            name="Video-Call"
             children={() => (
               <VideoCallScreen
                 initialState={initialState}

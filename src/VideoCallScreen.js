@@ -8,8 +8,8 @@ import {
     TwilioVideo,
 } from 'react-native-twilio-video-webrtc';
 import { useNavigation } from '@react-navigation/native';
-import MIcon from 'react-native-vector-icons/MaterialIcons';
-
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const dimensions = Dimensions.get('window');
 
@@ -19,27 +19,26 @@ const VideoCallScreen = ({ roomState, setRoomState, initialState }) => {
     const navigation = useNavigation();
 
     useEffect(() => {
-        const { roomName, accessToken } = roomState;
-
+        const { roomName, token } = roomState;
+        console.log("token:", token);
         //TODO: check if we have to use await in next line or not.
         twilioRef.current.connect({
             roomName,
-            accessToken,
+            accessToken: token,
         });
 
         setRoomState({ ...roomState, status: 'connecting' });
-
         return () => {
+            console.log("video call screen is ended!");
             handleEndButton();
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     //when end button clicks
-    const handleEndButton = async () => {
-        await twilioRef.current.disconnect();
+    const handleEndButton = () => {
         setRoomState(initialState);
-        navigation.pop();
+        twilioRef.current.disconnect();
     };
 
     //when mute button is pressed
@@ -82,8 +81,6 @@ const VideoCallScreen = ({ roomState, setRoomState, initialState }) => {
                 [track.trackSid, { participantSid: participant.sid, videoTrackSid: track.trackSid }],
             ]),
         });
-
-        console.log('videoTracks', roomState.videoTracks);
     };
 
     //when participant leaves the room
@@ -98,13 +95,15 @@ const VideoCallScreen = ({ roomState, setRoomState, initialState }) => {
 
     return (
         <View style={styles.callContainer}>
-            <Text>Video screen</Text>
             {
-                (roomState.status === 'connected' || roomState.staus === 'connecting') && (
+                console.log('videoTracks ----> ', roomState.videoTracks)
+            }
+            {
+                (roomState.status === 'connected' || roomState.staus === 'connecting') ? (
                     <View style={styles.callWrapper}>
                         {(roomState.status === 'connected') &&
                             <View style={styles.remoteGrid}>
-                                {Array.from(roomState.videoTracks, ([trackSid, trackIdentifier]) =>{
+                                {Array.from(roomState.videoTracks, ([trackSid, trackIdentifier]) => {
                                     console.log(trackSid, trackIdentifier);
                                     return <TwilioVideoParticipantView
                                         key={trackSid}
@@ -114,28 +113,44 @@ const VideoCallScreen = ({ roomState, setRoomState, initialState }) => {
                             </View>
                         }
                     </View>
-                )
+                ) : (<View>
+                    <Text>Room Name: {roomState.roomName}</Text>
+                    <Text>UserName: {roomState.username}</Text>
+                </View>)
             }
             <View style={styles.optionsContainer}>
-                <TouchableOpacity key="call-end" onPress={handleEndButton}>
-                    <MIcon
-                        name="call-end"
-                        size={28}
-                        style={{ backgroundColor: 'red', color: '#fff' }}
-                    />
-                </TouchableOpacity>
                 <TouchableOpacity key="mic" onPress={handleMuteButton}>
-                    <MIcon
+                    <Icon
                         name={roomState.isAudioEnabled ? 'mic' : 'mic-off'}
                         size={28}
                         style={{
-                            backgroundColor: roomState.isAudioEnabled ? 'green' : 'white',
-                            color: '#fff',
+                            backgroundColor: 'white',
+                            color: 'green',
+                            padding: 10,
+                            borderRadius: 50,
+                        }}
+                    />
+                </TouchableOpacity>
+                <TouchableOpacity key="phone-hangup" onPress={handleEndButton}>
+                    <MCIcon
+                        name="phone-hangup"
+                        size={36}
+                        style={{
+                            backgroundColor: 'red',
+                            color: "white",
+                            padding: 15,
+                            borderRadius: 50,
+                            marginHorizontal: 12,
                         }}
                     />
                 </TouchableOpacity>
                 <TouchableOpacity key="flip-camera-android" onPress={handleFlipButton}>
-                    <MIcon name="flip-camera-android" size={28} color="#fff" />
+                    <Icon name="flip-camera-android" size={28} color="#fff" style={{
+                        backgroundColor: 'white',
+                        color: 'green',
+                        padding: 10,
+                        borderRadius: 50,
+                    }} />
                 </TouchableOpacity>
             </View>
 
@@ -178,9 +193,9 @@ const styles = StyleSheet.create({
     localVideo: {
         position: 'absolute',
         right: 5,
-        bottom: 50,
+        bottom: 100,
         width: dimensions.width / 4,
-        height: dimensions.height / 4,
+        height: dimensions.height / 6,
     },
     optionsContainer: {
         position: 'absolute',
@@ -189,7 +204,8 @@ const styles = StyleSheet.create({
         right: 0,
         bottom: 5,
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
 });
 
