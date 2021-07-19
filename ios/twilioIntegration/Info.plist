@@ -51,5 +51,9 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>NSCameraUsageDescription</key>
+	<string>We require your permission to access the camera while in a video call</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>We require your permission to access the microphone while in a video call</string>
 </dict>
 </plist>

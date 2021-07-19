@@ -1,7 +1,7 @@
 require_relative '../node_modules/react-native/scripts/react_native_pods'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
-
-platform :ios, '10.0'
+#minimum 11 is required for twilio to work
+platform :ios, '11.0'
 
 target 'twilioIntegration' do
   config = use_native_modules!
@@ -27,3 +27,13 @@ target 'twilioIntegration' do
     react_native_post_install(installer)
   end
 end
+
+
+#Added for twilio
+pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
+#Added for twilio
+permissions_path = '../node_modules/react-native-permissions/ios'
+pod 'Permission-Camera', :path => "#{permissions_path}/Camera.podspec"
+pod 'Permission-Microphone', :path => "#{permissions_path}/Microphone.podspec"
+#Added for twilio
+target 'reactNativeVideoCallTests' do
