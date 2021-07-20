@@ -72,8 +72,6 @@ const VideoCallScreen = ({ roomState, setRoomState, initialState }) => {
 
     //when participant joins the room
     const onParticipantJoinsRoom = ({ participant, track }) => {
-        console.log('onParticipantAddedVideoTrack: ', participant, track);
-
         setRoomState({
             ...roomState,
             videoTracks: new Map([
@@ -104,10 +102,10 @@ const VideoCallScreen = ({ roomState, setRoomState, initialState }) => {
                         {(roomState.status === 'connected') &&
                             <View style={styles.remoteGrid}>
                                 {Array.from(roomState.videoTracks, ([trackSid, trackIdentifier]) => {
-                                    console.log(trackSid, trackIdentifier);
                                     return <TwilioVideoParticipantView
                                         key={trackSid}
                                         trackIdentifier={trackIdentifier}
+                                        style={styles.remoteVideo}
                                     />;
                                 })}
                             </View>
@@ -128,6 +126,7 @@ const VideoCallScreen = ({ roomState, setRoomState, initialState }) => {
                             color: 'green',
                             padding: 10,
                             borderRadius: 50,
+                            zIndex: 10,
                         }}
                     />
                 </TouchableOpacity>
@@ -141,6 +140,7 @@ const VideoCallScreen = ({ roomState, setRoomState, initialState }) => {
                             padding: 15,
                             borderRadius: 50,
                             marginHorizontal: 12,
+                            zIndex: 10,
                         }}
                     />
                 </TouchableOpacity>
@@ -150,6 +150,7 @@ const VideoCallScreen = ({ roomState, setRoomState, initialState }) => {
                         color: 'green',
                         padding: 10,
                         borderRadius: 50,
+                        zIndex: 10,
                     }} />
                 </TouchableOpacity>
             </View>
@@ -187,8 +188,13 @@ const styles = StyleSheet.create({
     remoteGrid: {
         flex: 1,
     },
+    // remoteVideo: {
+    //     flex: 1,
+    // },
     remoteVideo: {
-        flex: 1,
+        width: "100%",
+        height: "100%"  ,
+        zIndex: -1,
     },
     localVideo: {
         position: 'absolute',

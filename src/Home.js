@@ -11,7 +11,7 @@ import permissionHandler from './permissionHandler';
 
 const Home = ({ roomState, setRoomState, handleRoomInputChange }) => {
 
-    const API_URL = 'https://41094903dcf9.ngrok.io';
+    const API_URL = 'https://89ed1811bc7a.ngrok.io';
     const navigation = useNavigation();
     const [showLoading, setShowLoading] = useState(false);
     const [isPermissionGranted, setPermssionGranted] = useState(false);
